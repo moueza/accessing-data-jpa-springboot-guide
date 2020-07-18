@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,6 +18,10 @@ public class AccessingDataJpaApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(AccessingDataJpaApplication.class);
 	}
+
+	/**
+	 * @Autowired private CustomerRepository personRepository;
+	 */
 
 	@Bean
 	public CommandLineRunner demo(CustomerRepository repository) {
@@ -36,33 +41,37 @@ public class AccessingDataJpaApplication {
 			}
 			log.info("");
 
-			// fetch an individual customer by ID
-			// Customer customer = repository.findById(1L);
-			/**
-			 * https://stackoverflow.com/questions/57049480/jpa-repository-findbyid-returns-null-but-the-value-is-exist-on-db
-			 */
-			Optional<Customer> customer = repository.findById(1L);
-			if (null != customer) {
-				log.info("Customer found with findById(1L):");
-				log.info("--------------------------------");
+			if (null != repository) {
+				// fetch an individual customer by ID
+				Customer customer = repository.findById(2L);
+				/**
+				 * https://stackoverflow.com/questions/57049480/jpa-repository-findbyid-returns-null-but-the-value-is-exist-on-db
+				 */
+				// Optional<Customer> customer = repository.findById(1L);
+				if (null != customer) {
+					log.info("Customer found with findById(1L):");
+					log.info("--------------------------------");
 
+					log.info("");
+					log.info(customer.toString());
+					// log.info(customer.getId().toString());
+				} else {
+					log.info("customer IS NULL");
+				}
+
+				// fetch customers by last name
+				log.info("Customer found with findByLastName('Bauer'):");
+				log.info("--------------------------------------------");
+				repository.findByLastName("Bauer").forEach(bauer -> {
+					log.info(bauer.toString());
+				});
+				// for (Customer bauer : repository.findByLastName("Bauer")) {
+				// log.info(bauer.toString());
+				// }
 				log.info("");
-				log.info(customer.toString());
-				// log.info(customer.getId().toString());
 			} else {
-				log.info("customer IS NULL");
+				log.info("REPO IS NULL");
 			}
-
-			// fetch customers by last name
-			log.info("Customer found with findByLastName('Bauer'):");
-			log.info("--------------------------------------------");
-			repository.findByLastName("Bauer").forEach(bauer -> {
-				log.info(bauer.toString());
-			});
-			// for (Customer bauer : repository.findByLastName("Bauer")) {
-			// log.info(bauer.toString());
-			// }
-			log.info("");
 		};
 	}
 
