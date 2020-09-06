@@ -22,7 +22,6 @@ public class AccessingDataJpaApplication {
 	/**
 	 * @Autowired private CustomerRepository personRepository;
 	 */
-
 	@Bean
 	public CommandLineRunner demo(CustomerRepository repository) {
 		return (args) -> {
@@ -36,9 +35,11 @@ public class AccessingDataJpaApplication {
 			// fetch all customers
 			log.info("Customers found with findAll():");
 			log.info("-------------------------------");
+
 			for (Customer customer : repository.findAll()) {
 				log.info(customer.toString());
 			}
+
 			log.info("");
 
 			if (null != repository) {
@@ -72,6 +73,7 @@ public class AccessingDataJpaApplication {
 			} else {
 				log.info("REPO IS NULL");
 			}
+
 		};
 	}
 
